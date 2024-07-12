@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node src/index.js",
-        "dev": "nodemon src/index.js"
+        "dev": "nodemon src/index.js",
+        "swagger": "node src/swagger.js"
     },
     "keywords": [],
     "author": "",
@@ -18,6 +19,8 @@
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.5.0",
         "nodemailer": "^6.9.14",
+        "swagger-autogen": "^2.23.7",
+        "swagger-ui-express": "^5.0.1",
         "validator": "^13.12.0"
     },
     "devDependencies": {

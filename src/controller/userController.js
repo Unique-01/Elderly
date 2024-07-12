@@ -4,11 +4,12 @@ const sendEmailCode = require("../utils/sendEmailCode");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
-    const userExists = await User.findOne({ email: req.body.email });
+    const { email, phoneNumber, password } = req.body;
+    const userExists = await User.findOne({ email });
     if (userExists) {
         return res.status(400).send({ error: "Email is Already Registered" });
     }
-    const user = new User(req.body);
+    const user = new User({ email, phoneNumber, password });
 
     const verificationCode = await sendEmailCode(
         user.email,
@@ -140,7 +141,7 @@ const resetPassword = async (req, res) => {
         user.password = newPassword;
         user.verificationCode = undefined;
         user.verificationCodeExpires = undefined;
-        user.refreshToken = undefined
+        user.refreshToken = undefined;
 
         await user.save();
 
