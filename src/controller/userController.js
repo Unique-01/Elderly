@@ -151,6 +151,28 @@ const resetPassword = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    try {
+        const isPasswordMatch = await bcrypt.compare(
+            oldPassword,
+            req.user.password
+        );
+
+        if (!isPasswordMatch) {
+            return res.status(403).send({ error: "Invalid Credential" });
+        }
+
+        req.user.password = newPassword;
+        await req.user.save();
+
+        res.send({ message: "Password Changed Successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: "Server Error" });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -158,4 +180,5 @@ module.exports = {
     refresh,
     resetPasswordRequest,
     resetPassword,
+    changePassword,
 };
