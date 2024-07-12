@@ -23,7 +23,6 @@ const UserSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: Number,
-        required: true,
     },
     bio: {
         type: String,
@@ -36,6 +35,9 @@ const UserSchema = new mongoose.Schema({
         min: 6,
     },
     refreshToken: {
+        type: String,
+    },
+    googleId: {
         type: String,
     },
     verified: {
@@ -82,7 +84,7 @@ UserSchema.methods.generateRefreshToken = async function () {
 
     user.refreshToken = refreshToken;
     await user.save();
-    
+
     return refreshToken;
 };
 

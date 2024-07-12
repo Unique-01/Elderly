@@ -64,7 +64,9 @@ const loginUser = async (req, res) => {
         if (!user.verified) {
             return res.status(403).send({ message: "Email not verified" });
         }
-
+        if (!user.password) {
+            return res.status(400).send({ error: "Invalid email or password" });
+        }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
             return res.status(400).send({ error: "Invalid email or password" });
@@ -154,15 +156,16 @@ const resetPassword = async (req, res) => {
 const changePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     try {
-        const isPasswordMatch = await bcrypt.compare(
-            oldPassword,
-            req.user.password
-        );
+        if (req.user.password) {
+            const isPasswordMatch = await bcrypt.compare(
+                oldPassword,
+                req.user.password
+            );
 
-        if (!isPasswordMatch) {
-            return res.status(403).send({ error: "Invalid Credential" });
+            if (!isPasswordMatch) {
+                return res.status(403).send({ error: "Invalid Credential" });
+            }
         }
-
         req.user.password = newPassword;
         await req.user.save();
 
@@ -170,6 +173,21 @@ const changePassword = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ error: "Server Error" });
+    }
+};
+
+const googleCallback = async (req, res) => {
+    try {
+        const accessToken = await req.user.generateAccessToken();
+        const refreshToken = await req.user.generateRefreshToken();
+
+        req.user.refreshToken = refreshToken;
+        req.user.verified = true;
+        await req.user.save();
+
+        res.send({ accessToken, refreshToken });
+    } catch (error) {
+        res.json(error);
     }
 };
 
@@ -181,4 +199,5 @@ module.exports = {
     resetPasswordRequest,
     resetPassword,
     changePassword,
+    googleCallback,
 };
