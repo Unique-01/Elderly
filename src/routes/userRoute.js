@@ -7,7 +7,7 @@ const {
     resetPasswordRequest,
     resetPassword,
     changePassword,
-    googleCallback,
+    googleLoginCallback,
 } = require("../controller/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const passport = require("../passport-setup")
@@ -22,7 +22,8 @@ router.post("/users/forgotPassword", resetPasswordRequest);
 router.patch("/users/resetPassword", resetPassword);
 router.patch("/users/changePassword", authMiddleware, changePassword);
 
+// Google Authentication Routes
 router.get("/auth/google",passport.authenticate('google',{scope:['profile','email']}))
-router.get("/auth/google/callback",passport.authenticate('google',{session:false}),googleCallback)
+router.get("/auth/google/callback",passport.authenticate('google',{session:false}),googleLoginCallback)
 
 module.exports = router;

@@ -176,7 +176,7 @@ const changePassword = async (req, res) => {
     }
 };
 
-const googleCallback = async (req, res) => {
+const googleLoginCallback = async (req, res) => {
     try {
         const accessToken = await req.user.generateAccessToken();
         const refreshToken = await req.user.generateRefreshToken();
@@ -199,5 +199,5 @@ module.exports = {
     resetPasswordRequest,
     resetPassword,
     changePassword,
-    googleCallback,
+    googleLoginCallback,
 };

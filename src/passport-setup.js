@@ -23,7 +23,6 @@ passport.use(
                     googleId: profile.id,
                     fullName: profile.displayName,
                     email: profile.emails[0].value,
-                    registrationMethod:'google'
                 });
                 await user.save();
                 done(null, user);
