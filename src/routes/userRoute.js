@@ -7,23 +7,66 @@ const {
     resetPasswordRequest,
     resetPassword,
     changePassword,
-    googleLoginCallback,
+    socialLoginCallback,
+    addUserNewsInterest,
+    removeUserNewsInterest,
+    addUserNewsSources,
+    removeUserNewsSources,
 } = require("../controller/userController");
 const authMiddleware = require("../middleware/authMiddleware");
-const passport = require("../passport-setup")
+const passport = require("../passport-setup");
 
 const router = express.Router();
 
-router.post("/users/register", registerUser);
-router.post("/users/verifyEmail", verifyEmail);
-router.post("/users/login", loginUser);
-router.post("/users/refresh", refresh);
-router.post("/users/forgotPassword", resetPasswordRequest);
-router.patch("/users/resetPassword", resetPassword);
-router.patch("/users/changePassword", authMiddleware, changePassword);
+router.post("/users/register", registerUser /* #swagger.tags = ['Users'] */);
+router.post("/users/verifyEmail", verifyEmail /* #swagger.tags = ['Users'] */);
+router.post("/users/login", loginUser /* #swagger.tags = ['Users'] */);
+router.post("/users/refresh", refresh /* #swagger.tags = ['Users'] */);
+router.post(
+    "/users/forgotPassword",
+    resetPasswordRequest /* #swagger.tags = ['Users'] */
+);
+router.patch(
+    "/users/resetPassword",
+    resetPassword /* #swagger.tags = ['Users'] */
+);
+router.patch(
+    "/users/changePassword",
+    authMiddleware,
+    changePassword /* #swagger.tags = ['Users'] */
+);
+router.post(
+    "/users/newsInterest",
+    authMiddleware,
+    addUserNewsInterest /* #swagger.tags = ['Users'] */
+);
+router.delete(
+    "/users/newsInterest",
+    authMiddleware,
+    removeUserNewsInterest /* #swagger.tags = ['Users'] */
+);
+router.post(
+    "/users/newsSources",
+    authMiddleware,
+    addUserNewsSources /* #swagger.tags = ['Users'] */
+);
+router.delete(
+    "/users/newsSources",
+    authMiddleware,
+    removeUserNewsSources /* #swagger.tags = ['Users'] */
+);
 
 // Google Authentication Routes
-router.get("/auth/google",passport.authenticate('google',{scope:['profile','email']}))
-router.get("/auth/google/callback",passport.authenticate('google',{session:false}),googleLoginCallback)
+router.get(
+    "/auth/google",
+    passport.authenticate("google", {
+        scope: ["profile", "email"],
+    }) /* #swagger.tags = ['Users'] */
+);
+router.get(
+    "/auth/google/callback",
+    passport.authenticate("google", { session: false }),
+    socialLoginCallback /* #swagger.tags = ['Users'] */
+);
 
 module.exports = router;

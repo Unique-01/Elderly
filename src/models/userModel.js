@@ -50,6 +50,12 @@ const UserSchema = new mongoose.Schema({
     verificationCodeExpires: {
         type: Date,
     },
+    newsInterests: {
+        type: [String],
+    },
+    newsSources: {
+        type: [String],
+    },
 });
 
 UserSchema.pre("save", async function (next) {

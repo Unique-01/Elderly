@@ -4,10 +4,8 @@ const User = require("../models/userModel");
 const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
 
 const authMiddleware = async (req, res, next) => {
-    const token = req.header("Authorization").replace("Bearer ", "");
-    
-
     try {
+        const token = req.header("Authorization").replace("Bearer ", "");
         const decoded_token = jwt.verify(token, JWT_ACCESS_SECRET);
         const user = await User.findOne({
             _id: decoded_token._id,

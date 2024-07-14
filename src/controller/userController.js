@@ -176,7 +176,7 @@ const changePassword = async (req, res) => {
     }
 };
 
-const googleLoginCallback = async (req, res) => {
+const socialLoginCallback = async (req, res) => {
     try {
         const accessToken = await req.user.generateAccessToken();
         const refreshToken = await req.user.generateRefreshToken();
@@ -191,6 +191,91 @@ const googleLoginCallback = async (req, res) => {
     }
 };
 
+const addUserNewsInterest = async (req, res) => {
+    /*  #swagger.parameters['body'] = {
+                in: 'body',
+                schema: {
+                    $newsInterests: ['technology',],
+                    
+                }
+        } */
+    const { newsInterests } = req.body;
+
+    try {
+        req.user.newsInterests = [
+            ...new Set([...req.user.newsInterests, ...newsInterests]),
+        ];
+        await req.user.save();
+        res.send({ message: "Interests Added successfully" });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+};
+
+const removeUserNewsInterest = async (req, res) => {
+    /*  #swagger.parameters['body'] = {
+                in: 'body',
+                description: 'Some description...',
+                schema: {
+                    $newsInterests: ['technology',],
+                    
+                }
+        } */
+    const { newsInterests } = req.body;
+    try {
+        req.user.newsInterests = req.user.newsInterests.filter(
+            (interest) => !newsInterests.includes(interest)
+        );
+        await req.user.save();
+        res.send({ message: "Interest Removed successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const addUserNewsSources = async (req, res) => {
+    /*  #swagger.parameters['body'] = {
+                in: 'body',
+                description: 'Some description...',
+                schema: {
+                    $newsSources: ['bbc-news',],
+                    
+                }
+        } */
+    const { newsSources } = req.body;
+    try {
+        req.user.newsSources = [
+            ...new Set([...req.user.newsSources, ...newsSources]),
+        ]; // Ensure unique news sources
+        await req.user.save();
+        res.send({ message: "News Source added successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Remove news sources from a user
+const removeUserNewsSources = async (req, res) => {
+    /*  #swagger.parameters['body'] = {
+                in: 'body',
+                description: 'Some description...',
+                schema: {
+                    $newsSources: ['google-news',],
+                    
+                }
+        } */
+    const { newsSources } = req.body;
+    try {
+        req.user.newsSources = req.user.newsSources.filter(
+            (source) => !newsSources.includes(source)
+        );
+        await req.user.save();
+        res.send({ message: "News source removed" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -199,5 +284,9 @@ module.exports = {
     resetPasswordRequest,
     resetPassword,
     changePassword,
-    googleLoginCallback,
+    socialLoginCallback,
+    addUserNewsInterest,
+    removeUserNewsInterest,
+    addUserNewsSources,
+    removeUserNewsSources,
 };
