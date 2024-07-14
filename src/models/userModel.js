@@ -27,8 +27,13 @@ const UserSchema = new mongoose.Schema({
     bio: {
         type: String,
     },
-    website: {
+    location: {
         type: String,
+    },
+    gender: {
+        type: String,
+        enum: ["Male", "Female", "Other"],
+        required: false,
     },
     password: {
         type: String,
@@ -99,8 +104,10 @@ UserSchema.methods.toJSON = function () {
     const userObject = user.toObject();
 
     delete userObject.password;
+    delete userObject.refreshToken;
     delete userObject.verificationCode;
     delete userObject.verificationCodeExpires;
+    delete userObject.googleId;
 
     return userObject;
 };

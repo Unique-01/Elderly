@@ -8,10 +8,9 @@ const {
     resetPassword,
     changePassword,
     socialLoginCallback,
-    addUserNewsInterest,
-    removeUserNewsInterest,
-    addUserNewsSources,
-    removeUserNewsSources,
+    updateUserNewsInterest,
+    updateUserNewsSources,
+    userProfile,
 } = require("../controller/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const passport = require("../passport-setup");
@@ -35,25 +34,37 @@ router.patch(
     authMiddleware,
     changePassword /* #swagger.tags = ['Users'] */
 );
-router.post(
+router.get(
+    "/users/userProfile",
+    authMiddleware,
+    userProfile /* #swagger.tags = ['Users'] */
+);
+router.patch(
+    "/users/userProfile",
+    authMiddleware,
+    userProfile /* #swagger.tags = ['Users'] */
+);
+
+
+router.patch(
     "/users/newsInterest",
     authMiddleware,
-    addUserNewsInterest /* #swagger.tags = ['Users'] */
+    updateUserNewsInterest /* #swagger.tags = ['Users'] */
 );
 router.delete(
     "/users/newsInterest",
     authMiddleware,
-    removeUserNewsInterest /* #swagger.tags = ['Users'] */
+    updateUserNewsInterest /* #swagger.tags = ['Users'] */
 );
-router.post(
+router.patch(
     "/users/newsSources",
     authMiddleware,
-    addUserNewsSources /* #swagger.tags = ['Users'] */
+    updateUserNewsSources /* #swagger.tags = ['Users'] */
 );
 router.delete(
     "/users/newsSources",
     authMiddleware,
-    removeUserNewsSources /* #swagger.tags = ['Users'] */
+    updateUserNewsSources /* #swagger.tags = ['Users'] */
 );
 
 // Google Authentication Routes

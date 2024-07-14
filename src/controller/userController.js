@@ -191,7 +191,46 @@ const socialLoginCallback = async (req, res) => {
     }
 };
 
-const addUserNewsInterest = async (req, res) => {
+const userProfile = async (req, res) => {
+    try {
+        if (req.method == "GET") {
+            res.send(req.user);
+        } else if (req.method == "PATCH") {
+            const {
+                username,
+                fullName,
+                gender,
+                email,
+                phoneNumber,
+                bio,
+                location,
+            } = req.body;
+            const userId = req.user._id;
+            const user = await User.findByIdAndUpdate(
+                userId,
+                {
+                    username,
+                    fullName,
+                    gender,
+                    email,
+                    phoneNumber,
+                    bio,
+                    location,
+                },
+                { new: true, runValidators: true }
+            );
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            res.send(user);
+        } else {
+            res.status(405).send({ message: "Method not allowed" });
+        }
+    } catch (error) {
+        res.status(400).send({ error: error.message });
+    }
+};
+const updateUserNewsInterest = async (req, res) => {
     /*  #swagger.parameters['body'] = {
                 in: 'body',
                 schema: {
@@ -202,38 +241,26 @@ const addUserNewsInterest = async (req, res) => {
     const { newsInterests } = req.body;
 
     try {
-        req.user.newsInterests = [
-            ...new Set([...req.user.newsInterests, ...newsInterests]),
-        ];
-        await req.user.save();
-        res.send({ message: "Interests Added successfully" });
+        if (req.method == "PATCH") {
+            req.user.newsInterests = [
+                ...new Set([...req.user.newsInterests, ...newsInterests]),
+            ];
+            await req.user.save();
+            res.send({ message: "Interests Added successfully" });
+        } else if (req.method == "DELETE") {
+            req.user.newsInterests = req.user.newsInterests.filter(
+                (interest) => !newsInterests.includes(interest)
+            );
+            await req.user.save();
+            res.send({ message: "Interest Removed successfully" });
+        }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
+    
 };
 
-const removeUserNewsInterest = async (req, res) => {
-    /*  #swagger.parameters['body'] = {
-                in: 'body',
-                description: 'Some description...',
-                schema: {
-                    $newsInterests: ['technology',],
-                    
-                }
-        } */
-    const { newsInterests } = req.body;
-    try {
-        req.user.newsInterests = req.user.newsInterests.filter(
-            (interest) => !newsInterests.includes(interest)
-        );
-        await req.user.save();
-        res.send({ message: "Interest Removed successfully" });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-const addUserNewsSources = async (req, res) => {
+const updateUserNewsSources = async (req, res) => {
     /*  #swagger.parameters['body'] = {
                 in: 'body',
                 description: 'Some description...',
@@ -244,33 +271,19 @@ const addUserNewsSources = async (req, res) => {
         } */
     const { newsSources } = req.body;
     try {
-        req.user.newsSources = [
-            ...new Set([...req.user.newsSources, ...newsSources]),
-        ]; // Ensure unique news sources
-        await req.user.save();
-        res.send({ message: "News Source added successfully" });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-// Remove news sources from a user
-const removeUserNewsSources = async (req, res) => {
-    /*  #swagger.parameters['body'] = {
-                in: 'body',
-                description: 'Some description...',
-                schema: {
-                    $newsSources: ['google-news',],
-                    
-                }
-        } */
-    const { newsSources } = req.body;
-    try {
-        req.user.newsSources = req.user.newsSources.filter(
-            (source) => !newsSources.includes(source)
-        );
-        await req.user.save();
-        res.send({ message: "News source removed" });
+        if (req.method == "PATCH") {
+            req.user.newsSources = [
+                ...new Set([...req.user.newsSources, ...newsSources]),
+            ]; // Ensure unique news sources
+            await req.user.save();
+            res.send({ message: "News Source added successfully" });
+        } else if (req.method == "DELETE") {
+            req.user.newsSources = req.user.newsSources.filter(
+                (source) => !newsSources.includes(source)
+            );
+            await req.user.save();
+            res.send({ message: "News source removed" });
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -285,8 +298,7 @@ module.exports = {
     resetPassword,
     changePassword,
     socialLoginCallback,
-    addUserNewsInterest,
-    removeUserNewsInterest,
-    addUserNewsSources,
-    removeUserNewsSources,
+    updateUserNewsInterest,
+    updateUserNewsSources,
+    userProfile,
 };

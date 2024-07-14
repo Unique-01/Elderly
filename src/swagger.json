@@ -413,8 +413,100 @@
         }
       }
     },
+    "/users/userProfile": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "fullName": {
+                  "example": "any"
+                },
+                "gender": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "phoneNumber": {
+                  "example": "any"
+                },
+                "bio": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          }
+        }
+      }
+    },
     "/users/newsInterest": {
-      "post": {
+      "patch": {
         "tags": [
           "Users"
         ],
@@ -473,7 +565,6 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Some description...",
             "schema": {
               "type": "object",
               "properties": {
@@ -507,7 +598,7 @@
       }
     },
     "/users/newsSources": {
-      "post": {
+      "patch": {
         "tags": [
           "Users"
         ],
@@ -574,7 +665,7 @@
                 "newsSources": {
                   "type": "array",
                   "example": [
-                    "google-news"
+                    "bbc-news"
                   ],
                   "items": {
                     "type": "string"
