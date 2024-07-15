@@ -11,7 +11,7 @@ const {
     updateUserNewsInterest,
     updateUserNewsSources,
     userProfile,
-} = require("../controller/userController");
+} = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const passport = require("../passport-setup");
 
