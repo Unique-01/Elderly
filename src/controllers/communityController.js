@@ -112,6 +112,19 @@ const updateCommunity = async (req, res) => {
         res.status(500).send({ error: error.message });
     }
 };
+
+const getCommunityPosts = async (req, res) => {
+    const { communityId } = req.params;
+    try {
+        const posts = await Post.find({ community: communityId }).populate(
+            "author",
+            "username"
+        );
+        res.send(posts);
+    } catch (error) {
+        res.status(500).send({ error: "Server Error" });
+    }
+};
 module.exports = {
     createCommunity,
     getAllCommunity,
@@ -119,4 +132,5 @@ module.exports = {
     getCommunity,
     joinCommunity,
     updateCommunity,
+    getCommunityPosts,
 };

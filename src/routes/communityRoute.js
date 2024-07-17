@@ -6,6 +6,7 @@ const {
     getCommunity,
     joinCommunity,
     updateCommunity,
+    getCommunityPosts,
 } = require("../controllers/communityController");
 const authMiddleware = require("../middleware/authMiddleware");
 const fileUpload = require("../middleware/fileUpload");
@@ -38,6 +39,12 @@ router.patch(
     "/communities/:communityId/update",
     authMiddleware,
     updateCommunity /* #swagger.tags = ['Community'] */
+);
+
+router.get(
+    "/communities/:communityId/posts",
+    authMiddleware,
+    getCommunityPosts /* #swagger.tags = ['Community']*/
 );
 
 module.exports = router;
