@@ -39,6 +39,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         min: 6,
     },
+    age:{
+        type:Number
+    },
     refreshToken: {
         type: String,
     },
