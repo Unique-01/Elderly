@@ -1,4 +1,5 @@
 const Community = require("../models/communityModel");
+const Post = require("../models/postModel");
 
 const createCommunity = async (req, res) => {
     /*
@@ -125,6 +126,23 @@ const getCommunityPosts = async (req, res) => {
         res.status(500).send({ error: "Server Error" });
     }
 };
+const deleteCommunity = async (req, res) => {
+    const { communityId } = req.params;
+    const userId = req.user._id;
+    try {
+        const community = await Community.findById(communityId);
+        if (!community) {
+            return res.status(404).send({ error: "Community not found" });
+        }
+        if (community.author.toString() !== userId.toString()) {
+            return res.status(403).send({ error: "Permission denied" });
+        }
+        await Community.deleteOne({ _id: communityId });
+        res.sent({ message: "Community deleted successfully", community });
+    } catch (error) {
+        res.status(500).send({ error: "Server Failure" });
+    }
+};
 module.exports = {
     createCommunity,
     getAllCommunity,
@@ -133,4 +151,5 @@ module.exports = {
     joinCommunity,
     updateCommunity,
     getCommunityPosts,
+    deleteCommunity
 };

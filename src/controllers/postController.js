@@ -1,5 +1,6 @@
 const Post = require("../models/postModel");
 const Community = require("../models/communityModel");
+const Comment = require("../models/commentModel");
 
 const createPost = async (req, res) => {
     /*
@@ -120,7 +121,7 @@ const deletePost = async (req, res) => {
             return res.status(403).send({ error: "Permission denied" });
         }
 
-        await post.remove();
+        await Post.deleteOne({ _id: postId });
 
         res.send({ message: "Post deleted successfully", post });
     } catch (error) {
@@ -128,6 +129,15 @@ const deletePost = async (req, res) => {
     }
 };
 
+const getPostComments = async (req, res) => {
+    const { postId } = req.params;
+    try {
+        const comments = Comment.find({ postId });
+        res.send(comments);
+    } catch (error) {
+        res.status(500).send({ error: "Server Error" });
+    }
+};
 module.exports = {
     createPost,
     getAllPost,
@@ -135,4 +145,5 @@ module.exports = {
     getUserPosts,
     updatePost,
     deletePost,
+    getPostComments,
 };

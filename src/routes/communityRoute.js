@@ -7,6 +7,7 @@ const {
     joinCommunity,
     updateCommunity,
     getCommunityPosts,
+    deleteCommunity,
 } = require("../controllers/communityController");
 const authMiddleware = require("../middleware/authMiddleware");
 const fileUpload = require("../middleware/fileUpload");
@@ -38,6 +39,7 @@ router.post(
 router.patch(
     "/communities/:communityId/update",
     authMiddleware,
+    fileUpload.single("coverPhoto"),
     updateCommunity /* #swagger.tags = ['Community'] */
 );
 
@@ -45,6 +47,11 @@ router.get(
     "/communities/:communityId/posts",
     authMiddleware,
     getCommunityPosts /* #swagger.tags = ['Community']*/
+);
+router.delete(
+    "/communities/:communityId/delete",
+    authMiddleware,
+    deleteCommunity /* #swagger.tags = ['Community']*/
 );
 
 module.exports = router;
