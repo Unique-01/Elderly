@@ -13,7 +13,7 @@ const {
     userProfile,
 } = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
-const passport = require("../passport-setup");
+const passport = require("../config/passport-setup");
 
 const router = express.Router();
 
