@@ -17,6 +17,7 @@ const medicineRouter = require("./routes/medicineRoute");
 const communityRouter = require("./routes/communityRoute.js");
 const postRouter = require("./routes/postRoute.js");
 const commentRouter = require("./routes/commentRoute.js");
+const messageRouter = require("./routes/messageRoute.js")
 
 const app = express();
 
@@ -38,5 +39,6 @@ app.use("/api", medicineRouter);
 app.use("/api", communityRouter);
 app.use("/api", postRouter);
 app.use("/api", commentRouter);
+app.use("/api",messageRouter)
 
 module.exports = app;

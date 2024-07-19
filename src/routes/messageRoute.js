@@ -10,10 +10,12 @@ const router = express.Router();
 router.get(
     "/messages/private/:recipientId",
     authMiddleware,
-    getPrivateMessages /* #swagger.tags = ['Message'] */
+    getPrivateMessages /* #swagger.tags = ['Messages'] */
 );
 router.get(
     "/messages/community/:communityId",
     authMiddleware,
-    getCommunityMessages /* #swagger.tags = ['Message'] */
+    getCommunityMessages /* #swagger.tags = ['Messages'] */
 );
+
+module.exports = router;
