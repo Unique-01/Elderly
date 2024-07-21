@@ -32,6 +32,13 @@ app.use(cors({ origin: process.env.CORS_ORIGIN }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Route to serve the documentation
+app.get('/docs', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'socketDocs.html'));
+});
+
 
 app.use("/api/", userRouter);
 app.use("/api", newsRouter);

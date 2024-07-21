@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Socket API Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Chat Socket API Documentation</h1>
+    <section>
+        <h2>Authentication</h2>
+        <p>Clients must provide a JWT token to authenticate the socket connection. The token should be included during the socket connection initialization.</p>
+    </section>
+    <section>
+        <h2>Socket Events</h2>
+        <h3>Connection</h3>
+        <p><strong>Description:</strong> Connect to the server using Socket.IO or any compatible WebSocket library.</p>
+        <p><strong>Parameters:</strong> None</p>
+        <pre><code>Connect to the server with the JWT token.</code></pre>
+
+        <h3>Join Private Chat</h3>
+        <p><strong>Event:</strong> <code>join</code></p>
+        <p><strong>Description:</strong> Join a private chat room using the user ID.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code>userId</code> (string): The user ID to join the private chat room.</li>
+        </ul>
+        <pre><code>Emit 'join' event with userId.</code></pre>
+
+        <h3>Send Private Message</h3>
+        <p><strong>Event:</strong> <code>private_message</code></p>
+        <p><strong>Description:</strong> Send a private message to a recipient.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code>senderId</code> (string): The ID of the sender.</li>
+            <li><code>recipientId</code> (string): The ID of the recipient.</li>
+            <li><code>message</code> (string): The message content.</li>
+        </ul>
+        <pre><code>Emit 'private_message' event with senderId, recipientId, and message.</code></pre>
+
+        <h3>Join Community Chat</h3>
+        <p><strong>Event:</strong> <code>join_community</code></p>
+        <p><strong>Description:</strong> Join a community chat room using the community ID.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code>communityId</code> (string): The ID of the community to join.</li>
+        </ul>
+        <pre><code>Emit 'join_community' event with communityId.</code></pre>
+
+        <h3>Send Community Message</h3>
+        <p><strong>Event:</strong> <code>community_message</code></p>
+        <p><strong>Description:</strong> Send a message to a community chat room.</p>
+        <p><strong>Parameters:</strong></p>
+        <ul>
+            <li><code>senderId</code> (string): The ID of the sender.</li>
+            <li><code>communityId</code> (string): The ID of the community.</li>
+            <li><code>message</code> (string): The message content.</li>
+        </ul>
+        <pre><code>Emit 'community_message' event with senderId, communityId, and message.</code></pre>
+
+        <h3>Disconnection</h3>
+        <p><strong>Event:</strong> <code>disconnect</code></p>
+        <p><strong>Description:</strong> Disconnect from the server.</p>
+        <pre><code>Listen for 'disconnect' event.</code></pre>
+    </section>
+    <section>
+        <h2>Error Handling</h2>
+        <p><strong>Event:</strong> <code>connect_error</code></p>
+        <p><strong>Description:</strong> This event is emitted when a connection error occurs, such as authentication failure</p>
+        <pre><code>Listen for 'connect_error' event.</code></pre>
+        <p><strong>Event:</strong> <code>error</code></p>
+        <p><strong>Description:</strong> This event is emitted when an error occurs, such as invalid data or data not found.</p>
+        <pre><code>Listen for 'error' event.</code></pre>
+    </section>
+    <section>
+        <h2>Example Usage</h2>
+        <h3>JavaScript (Socket.IO)</h3>
+        <p><strong>Connection:</strong></p>
+        <pre><code class="language-javascript">// Establish socket connection
+const socket = io('http://yourserver.com', {
+    auth: { token: 'your_jwt_token' }
+});
+
+socket.on('connect', () => {
+    console.log('Connected to server');
+});
+
+// Join private chat
+socket.emit('join', 'userId');
+
+// Send private message
+socket.emit('private_message', {
+    senderId: 'senderId',
+    recipientId: 'recipientId',
+    message: 'Hello!'
+});
+
+// Listen for private messages
+socket.on('private_message', (data) => {
+    console.log('Private message received:', data);
+});
+
+// Join community chat
+socket.emit('join_community', 'communityId');
+
+// Send community message
+socket.emit('community_message', {
+    senderId: 'senderId',
+    communityId: 'communityId',
+    message: 'Hello, community!'
+});
+
+// Listen for community messages
+socket.on('community_message', (data) => {
+    console.log('Community message received:', data);
+});
+
+// Handle disconnection
+socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+});
+
+// Handle errors
+socket.on('error', (error) => {
+    console.error('Error:', error);
+});
+</code></pre>
+
+        <h3>Flutter (web_socket_channel)</h3>
+        <p><strong>Connection:</strong></p>
+        <pre><code class="language-dart">import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
+
+// Establish socket connection
+final channel = IOWebSocketChannel.connect('ws://yourserver.com');
+
+// Send authentication token
+channel.sink.add('{"token": "your_jwt_token"}');
+
+// Join private chat
+channel.sink.add('{"event": "join", "userId": "userId"}');
+
+// Send private message
+channel.sink.add('{"event": "private_message", "senderId": "senderId", "recipientId": "recipientId", "message": "Hello!"}');
+
+// Listen for private messages
+channel.stream.listen((message) {
+    final data = jsonDecode(message);
+    if (data['event'] == 'private_message') {
+        print('Private message received: ${data['message']}');
+    }
+});
+
+// Join community chat
+channel.sink.add('{"event": "join_community", "communityId": "communityId"}');
+
+// Send community message
+channel.sink.add('{"event": "community_message", "senderId": "senderId", "communityId": "communityId", "message": "Hello, community!"}');
+
+// Listen for community messages
+channel.stream.listen((message) {
+    final data = jsonDecode(message);
+    if (data['event'] == 'community_message') {
+        print('Community message received: ${data['message']}');
+    }
+});
+
+// Handle disconnection
+channel.stream.listen((message) {
+    final data = jsonDecode(message);
+    if (data['event'] == 'disconnect') {
+        print('Disconnected from server');
+    }
+});
+
+// Handle errors
+channel.stream.listen((message) {
+    final data = jsonDecode(message);
+    if (data['event'] == 'error') {
+        print('Error: ${data['error']}');
+    }
+});
+</code></pre>
+    </section>
+</body>
+</html>

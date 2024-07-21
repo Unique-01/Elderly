@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+pre {
+    background: #fff;
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+code {
+    font-family: Consolas, "Courier New", monospace;
+}
+
+section {
+    padding: 1em;
+    background: #fff;
+    margin: 1em;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
