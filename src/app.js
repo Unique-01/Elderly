@@ -35,7 +35,7 @@ app.use("/api/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Route to serve the documentation
-app.get('/docs', (req, res) => {
+app.get('/socket-docs', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'socketDocs.html'));
 });
 
