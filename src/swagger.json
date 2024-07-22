@@ -12,6 +12,239 @@
     "https"
   ],
   "paths": {
+    "/audioBook": {
+      "post": {
+        "tags": [
+          "AudioBook"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "audioFile",
+            "in": "formData",
+            "description": "Audio File. Note: Do not test the file upload Here",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "coverImage",
+            "in": "formData",
+            "description": "Cover Photo. Note: Do not test the photo upload Here",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "author": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "duration": {
+                  "example": "any"
+                },
+                "genre": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "AudioBook"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/audioBook/{audioBookId}": {
+      "get": {
+        "tags": [
+          "AudioBook"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "audioBookId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "AudioBook"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "audioBookId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "audioFile",
+            "in": "formData",
+            "description": "Audio File. Note: Do not test the file upload Here",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "coverImage",
+            "in": "formData",
+            "description": "Cover Photo. Note: Do not test the photo upload Here",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "author": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "duration": {
+                  "example": "any"
+                },
+                "genre": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AudioBook"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "audioBookId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/comments": {
       "post": {
         "tags": [
@@ -664,7 +897,7 @@
     "/messages/private/{recipientId}": {
       "get": {
         "tags": [
-          "Message"
+          "Messages"
         ],
         "description": "",
         "parameters": [
@@ -696,7 +929,7 @@
     "/messages/community/{communityId}": {
       "get": {
         "tags": [
-          "Message"
+          "Messages"
         ],
         "description": "",
         "parameters": [
@@ -1465,6 +1698,9 @@
                   "example": "any"
                 },
                 "location": {
+                  "example": "any"
+                },
+                "age": {
                   "example": "any"
                 }
               }

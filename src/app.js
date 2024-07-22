@@ -17,7 +17,8 @@ const medicineRouter = require("./routes/medicineRoute");
 const communityRouter = require("./routes/communityRoute.js");
 const postRouter = require("./routes/postRoute.js");
 const commentRouter = require("./routes/commentRoute.js");
-const messageRouter = require("./routes/messageRoute.js")
+const messageRouter = require("./routes/messageRoute.js");
+const audioBookRouter = require("./routes/audioBookRoute.js");
 
 const app = express();
 
@@ -32,13 +33,12 @@ app.use(cors({ origin: process.env.CORS_ORIGIN }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/uploads", express.static(path.join(__dirname, "../uploads")));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, "../public")));
 
 // Route to serve the documentation
-app.get('/socket-docs', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'socketDocs.html'));
+app.get("/socket-docs", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public", "socketDocs.html"));
 });
-
 
 app.use("/api/", userRouter);
 app.use("/api", newsRouter);
@@ -46,6 +46,7 @@ app.use("/api", medicineRouter);
 app.use("/api", communityRouter);
 app.use("/api", postRouter);
 app.use("/api", commentRouter);
-app.use("/api",messageRouter)
+app.use("/api", messageRouter);
+app.use("/api", audioBookRouter);
 
 module.exports = app;
