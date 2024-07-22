@@ -204,6 +204,7 @@ const userProfile = async (req, res) => {
                 phoneNumber,
                 bio,
                 location,
+                age,
             } = req.body;
             const userId = req.user._id;
             const user = await User.findByIdAndUpdate(
@@ -216,6 +217,7 @@ const userProfile = async (req, res) => {
                     phoneNumber,
                     bio,
                     location,
+                    age,
                 },
                 { new: true, runValidators: true }
             );
