@@ -17,5 +17,9 @@ router.get(
     authMiddleware,
     newsController.getPersonalizedNews /* #swagger.tags = ['News'] */
 );
+router.get(
+    "/news/latest",
+    newsController.getLatestNews /* #swagger.tags = ['News'] */
+);
 
 module.exports = router;

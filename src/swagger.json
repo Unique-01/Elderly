@@ -1102,6 +1102,22 @@
         }
       }
     },
+    "/news/latest": {
+      "get": {
+        "tags": [
+          "News"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/posts": {
       "post": {
         "tags": [

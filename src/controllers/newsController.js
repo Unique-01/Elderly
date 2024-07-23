@@ -1,3 +1,4 @@
+const { latestNews } = require("../services/latestNewsService");
 const newsService = require("../services/newsService");
 
 const getNews = async (req, res) => {
@@ -47,4 +48,14 @@ const getSources = async (req, res) => {
     }
 };
 
-module.exports = { getNews, searchNews, getSources, getPersonalizedNews };
+const getLatestNews = async (req, res) => {
+    try {
+        const news = await latestNews();
+        res.send(news);
+    } catch (error) {
+        // console.log(error)
+        res.status(500).send({ error: error.message });
+    }
+};
+
+module.exports = { getNews, searchNews, getSources, getPersonalizedNews,getLatestNews };
