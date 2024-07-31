@@ -18,22 +18,23 @@ const passport = require("../config/passport-setup");
 const router = express.Router();
 
 router.post("/users/register", registerUser /* #swagger.tags = ['Users'] */);
-router.post("/users/verifyEmail", verifyEmail /* #swagger.tags = ['Users'] */);
+// router.post("/users/verifyEmail", verifyEmail 
+// /* #swagger.tags = ['Users'] */);
 router.post("/users/login", loginUser /* #swagger.tags = ['Users'] */);
 router.post("/users/refresh", refresh /* #swagger.tags = ['Users'] */);
-router.post(
-    "/users/forgotPassword",
-    resetPasswordRequest /* #swagger.tags = ['Users'] */
-);
-router.patch(
-    "/users/resetPassword",
-    resetPassword /* #swagger.tags = ['Users'] */
-);
-router.patch(
-    "/users/changePassword",
-    authMiddleware,
-    changePassword /* #swagger.tags = ['Users'] */
-);
+// router.post(
+//     "/users/forgotPassword",
+//     resetPasswordRequest /* #swagger.tags = ['Users'] */
+// );
+// router.patch(
+//     "/users/resetPassword",
+//     resetPassword /* #swagger.tags = ['Users'] */
+// );
+// router.patch(
+//     "/users/changePassword",
+//     authMiddleware,
+//     changePassword /* #swagger.tags = ['Users'] */
+// );
 router.get(
     "/users/userProfile",
     authMiddleware,

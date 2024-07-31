@@ -11,14 +11,14 @@ const registerUser = async (req, res) => {
     }
     const user = new User({ email, phoneNumber, password });
 
-    const verificationCode = await sendEmailCode(
-        user.email,
-        "Verify Email",
-        "Your email verification code"
-    );
+    // const verificationCode = await sendEmailCode(
+    //     user.email,
+    //     "Verify Email",
+    //     "Your email verification code"
+    // );
 
-    user.verificationCode = verificationCode;
-    user.verificationCodeExpires = Date.now() + 3600000;
+    // user.verificationCode = verificationCode;
+    // user.verificationCodeExpires = Date.now() + 3600000;
 
     try {
         await user.save();
@@ -61,9 +61,9 @@ const loginUser = async (req, res) => {
             return res.status(400).send({ error: "Invalid email or password" });
         }
 
-        if (!user.verified) {
-            return res.status(403).send({ message: "Email not verified" });
-        }
+        // if (!user.verified) {
+        //     return res.status(403).send({ message: "Email not verified" });
+        // }
         if (!user.password) {
             return res.status(400).send({ error: "Invalid email or password" });
         }

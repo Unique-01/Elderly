@@ -48,16 +48,16 @@ const UserSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
-    verified: {
-        type: Boolean,
-        default: false,
-    },
-    verificationCode: {
-        type: String,
-    },
-    verificationCodeExpires: {
-        type: Date,
-    },
+    // verified: {
+    //     type: Boolean,
+    //     default: false,
+    // },
+    // verificationCode: {
+    //     type: String,
+    // },
+    // verificationCodeExpires: {
+    //     type: Date,
+    // },
     newsInterests: {
         type: [String],
     },
