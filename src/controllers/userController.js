@@ -259,7 +259,6 @@ const updateUserNewsInterest = async (req, res) => {
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-    
 };
 
 const updateUserNewsSources = async (req, res) => {
@@ -291,6 +290,15 @@ const updateUserNewsSources = async (req, res) => {
     }
 };
 
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.send(users);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -303,4 +311,5 @@ module.exports = {
     updateUserNewsInterest,
     updateUserNewsSources,
     userProfile,
+    getUsers,
 };

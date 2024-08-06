@@ -11,14 +11,17 @@ const {
     updateUserNewsInterest,
     updateUserNewsSources,
     userProfile,
+    getUsers,
 } = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const passport = require("../config/passport-setup");
 
 const router = express.Router();
 
+router.get("/users", getUsers /* #swagger.tags = ['Users'] */);
+
 router.post("/users/register", registerUser /* #swagger.tags = ['Users'] */);
-// router.post("/users/verifyEmail", verifyEmail 
+// router.post("/users/verifyEmail", verifyEmail
 // /* #swagger.tags = ['Users'] */);
 router.post("/users/login", loginUser /* #swagger.tags = ['Users'] */);
 router.post("/users/refresh", refresh /* #swagger.tags = ['Users'] */);
@@ -45,7 +48,6 @@ router.patch(
     authMiddleware,
     userProfile /* #swagger.tags = ['Users'] */
 );
-
 
 router.patch(
     "/users/newsInterest",
