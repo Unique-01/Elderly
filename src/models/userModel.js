@@ -39,8 +39,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         min: 6,
     },
-    age:{
-        type:Number
+    age: {
+        type: Number,
     },
     refreshToken: {
         type: String,
@@ -48,9 +48,21 @@ const UserSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
-    profilePicture:{
-        type:String
+    profilePicture: {
+        type: String,
     },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
     // verified: {
     //     type: Boolean,
     //     default: false,
@@ -68,6 +80,9 @@ const UserSchema = new mongoose.Schema({
         type: [String],
     },
 });
+
+UserSchema.index({ followers: 1 });
+UserSchema.index({ following: 1 });
 
 UserSchema.pre("save", async function (next) {
     const user = this;

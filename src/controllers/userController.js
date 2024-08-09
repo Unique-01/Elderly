@@ -196,7 +196,6 @@ const userProfile = async (req, res) => {
         if (req.method == "GET") {
             res.send(req.user);
         } else if (req.method == "PATCH") {
-            
             const {
                 username,
                 fullName,
@@ -302,6 +301,64 @@ const getUsers = async (req, res) => {
     }
 };
 
+const followUser = async (req, res) => {
+    const userId = req.user._id;
+    const { followId } = req.params;
+
+    if (userId === followId) {
+        return res.status(400).send({ error: "You can not follow yourself" });
+    }
+    try {
+        const user = await User.findById(userId);
+        const userToFollow = await User.findById(followId);
+        if (!userToFollow) {
+            return res.status(404).send({ error: "User not found" });
+        }
+        if (user.following.includes(followId)) {
+            return res
+                .status(400)
+                .send({ error: "You are already following this user" });
+        }
+        user.following.push(followId);
+        userToFollow.followers.push(userId);
+
+        await user.save();
+        await userToFollow.save();
+
+        res.send({ message: "User followed successfully" });
+    } catch (error) {
+        res.status(500).send({ error: "Server Error" });
+    }
+};
+
+const unfollowUser = async (req, res) => {
+    const userId = req.user._id;
+    const { unfollowId } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        const userToUnFollow = await User.findById(unfollowId);
+
+        if (!userToUnFollow) {
+            return res.status(404).send({ error: "User not found" });
+        }
+        if (!user.following.includes(unfollowId)) {
+            return res
+                .status(400)
+                .send({ error: "You are not following this user" });
+        }
+
+        user.following.pull(unfollowId);
+        userToUnFollow.followers.pull(userId);
+
+        await user.save();
+        await userToUnFollow.save();
+        res.send({ message: "User Unfollowed Successfully" });
+    } catch (error) {
+        res.status(500).send({ error: "Server Error" });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -315,4 +372,6 @@ module.exports = {
     updateUserNewsSources,
     userProfile,
     getUsers,
+    followUser,
+    unfollowUser,
 };

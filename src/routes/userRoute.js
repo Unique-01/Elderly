@@ -12,10 +12,12 @@ const {
     updateUserNewsSources,
     userProfile,
     getUsers,
+    followUser,
+    unfollowUser,
 } = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const passport = require("../config/passport-setup");
-const fileUpload = require("../middleware/fileUpload")
+const fileUpload = require("../middleware/fileUpload");
 const router = express.Router();
 
 router.get("/users", getUsers /* #swagger.tags = ['Users'] */);
@@ -47,7 +49,7 @@ router.patch(
     "/users/userProfile",
     authMiddleware,
     fileUpload.single("profilePicture"),
-    userProfile 
+    userProfile
     /* 
         #swagger.tags = ['Users'] 
         #swagger.parameters['profilePicture'] = {
@@ -78,6 +80,17 @@ router.delete(
     "/users/newsSources",
     authMiddleware,
     updateUserNewsSources /* #swagger.tags = ['Users'] */
+);
+
+router.post(
+    "/users/follow/:followId",
+    authMiddleware,
+    followUser /* #swagger.tags = ['Users'] */
+);
+router.post(
+    "/users/unfollow/:unfollowId",
+    authMiddleware,
+    unfollowUser /* #swagger.tags = ['Users'] */
 );
 
 // Google Authentication Routes
