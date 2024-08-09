@@ -7,6 +7,8 @@ const {
     updatePost,
     deletePost,
     getPostComments,
+    likePost,
+    unlikePost,
 } = require("../controllers/postController");
 const authMiddleware = require("../middleware/authMiddleware");
 const fileUpload = require("../middleware/fileUpload");
@@ -46,6 +48,16 @@ router.delete(
     "/posts/:postId/delete",
     authMiddleware,
     deletePost /* #swagger.tags = ['Post']*/
+);
+router.post(
+    "/posts/:postId/like",
+    authMiddleware,
+    likePost /* #swagger.tags = ['Post']*/
+);
+router.post(
+    "/posts/:postId/unlike",
+    authMiddleware,
+    unlikePost /* #swagger.tags = ['Post']*/
 );
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const Post = require("../models/postModel");
 const Community = require("../models/communityModel");
 const Comment = require("../models/commentModel");
+const User = require("../models/userModel");
 
 const createPost = async (req, res) => {
     /*
@@ -138,6 +139,54 @@ const getPostComments = async (req, res) => {
         res.status(500).send({ error: "Server Error" });
     }
 };
+
+const likePost = async (req, res) => {
+    const { postId } = req.params;
+    const userId = req.user._id;
+
+    try {
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).send({ error: "Post not found" });
+        }
+        if (post.likes.includes(userId)) {
+            return res
+                .status(400)
+                .send({ error: "You have already liked this post" });
+        }
+
+        post.likes.push(userId);
+        await post.save();
+        res.send({ message: "Post liked successfully" });
+    } catch (error) {
+        res.status(500).send({ error: "Server Error" });
+    }
+};
+
+const unlikePost = async (req, res) => {
+    const { postId } = req.params;
+    const userId = req.user._id;
+
+    try {
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).send({ error: "Post not found" });
+        }
+        if (!post.likes.includes(userId)) {
+            return res
+                .status(400)
+                .send({ error: "You have not liked this post" });
+        }
+
+        post.likes.pull(userId);
+        await post.save();
+        res.send({ message: "Post unlike successfully" });
+    } catch (error) {
+        res.status(500).send({ error: "Server Error" });
+    }
+};
 module.exports = {
     createPost,
     getAllPost,
@@ -146,4 +195,6 @@ module.exports = {
     updatePost,
     deletePost,
     getPostComments,
+    likePost,
+    unlikePost,
 };
