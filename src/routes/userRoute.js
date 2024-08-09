@@ -15,7 +15,7 @@ const {
 } = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const passport = require("../config/passport-setup");
-
+const fileUpload = require("../middleware/fileUpload")
 const router = express.Router();
 
 router.get("/users", getUsers /* #swagger.tags = ['Users'] */);
@@ -46,7 +46,17 @@ router.get(
 router.patch(
     "/users/userProfile",
     authMiddleware,
-    userProfile /* #swagger.tags = ['Users'] */
+    fileUpload.single("profilePicture"),
+    userProfile 
+    /* 
+        #swagger.tags = ['Users'] 
+        #swagger.parameters['profilePicture'] = {
+            in: 'formData',
+            description: 'Profile Picture. Note: Do not test the photo upload Here',
+            required: false,
+            type: 'file'
+        }
+    */
 );
 
 router.patch(

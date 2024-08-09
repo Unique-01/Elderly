@@ -196,6 +196,7 @@ const userProfile = async (req, res) => {
         if (req.method == "GET") {
             res.send(req.user);
         } else if (req.method == "PATCH") {
+            
             const {
                 username,
                 fullName,
@@ -206,6 +207,7 @@ const userProfile = async (req, res) => {
                 location,
                 age,
             } = req.body;
+            const profilePicture = req.file && `/uploads/${req.file.filename}`;
             const userId = req.user._id;
             const user = await User.findByIdAndUpdate(
                 userId,
@@ -218,6 +220,7 @@ const userProfile = async (req, res) => {
                     bio,
                     location,
                     age,
+                    profilePicture,
                 },
                 { new: true, runValidators: true }
             );

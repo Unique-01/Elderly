@@ -48,6 +48,9 @@ const UserSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
+    profilePicture:{
+        type:String
+    },
     // verified: {
     //     type: Boolean,
     //     default: false,

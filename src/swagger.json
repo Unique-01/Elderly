@@ -1554,6 +1554,13 @@
             "type": "string"
           },
           {
+            "name": "profilePicture",
+            "in": "formData",
+            "description": "Profile Picture. Note: Do not test the photo upload Here",
+            "required": false,
+            "type": "file"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
