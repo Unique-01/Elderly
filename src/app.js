@@ -19,6 +19,7 @@ const postRouter = require("./routes/postRoute.js");
 const commentRouter = require("./routes/commentRoute.js");
 const messageRouter = require("./routes/messageRoute.js");
 const audioBookRouter = require("./routes/audioBookRoute.js");
+const notificationRouter = require("./routes/notificationRoute.js");
 
 const app = express();
 
@@ -48,5 +49,6 @@ app.use("/api", postRouter);
 app.use("/api", commentRouter);
 app.use("/api", messageRouter);
 app.use("/api", audioBookRouter);
+app.use("/api", notificationRouter);
 
 module.exports = app;

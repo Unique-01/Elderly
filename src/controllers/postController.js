@@ -2,6 +2,43 @@ const Post = require("../models/postModel");
 const Community = require("../models/communityModel");
 const Comment = require("../models/commentModel");
 const User = require("../models/userModel");
+const Notification = require("../models/notificationModel")
+
+// const createPost = async (req, res) => {
+//     /*
+//     #swagger.parameters['image'] = {
+//             in: 'formData',
+//             description: 'Post Image. Note: Do not test the photo upload Here',
+//             required: false,
+//             type: 'file'
+//     }
+//     */
+//     const { content, communityId } = req.body;
+//     const image = req.file ? `/uploads/${req.file.filename}` : "";
+//     const author = req.user._id;
+//     try {
+//         const community = await Community.findById(communityId);
+//         if (!community) {
+//             return res.status(404).send({ error: "Community not found" });
+//         }
+
+//         if (!community.members.includes(author)) {
+//             return res.status(403).send("User not in community");
+//         }
+//         const post = new Post({
+//             content,
+//             author,
+//             image,
+//             community: communityId,
+//         });
+//         await post.save();
+//         community.posts.push(post._id);
+//         await community.save();
+//         res.status(201).send(post);
+//     } catch (error) {
+//         res.status(400).send({ error: error.message });
+//     }
+// };
 
 const createPost = async (req, res) => {
     /*
@@ -15,6 +52,7 @@ const createPost = async (req, res) => {
     const { content, communityId } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : "";
     const author = req.user._id;
+
     try {
         const community = await Community.findById(communityId);
         if (!community) {
@@ -24,15 +62,51 @@ const createPost = async (req, res) => {
         if (!community.members.includes(author)) {
             return res.status(403).send("User not in community");
         }
+
+        // Create the post
         const post = new Post({
             content,
             author,
             image,
             community: communityId,
         });
+
         await post.save();
+
+        // Add post to community
         community.posts.push(post._id);
         await community.save();
+
+        // Notification Logic
+        const communityMemberIds = community.members.map((member) =>
+            member.toString()
+        );
+
+        // Find the author's followers (IDs only)
+        const authorDoc = await User.findById(author, "followers username");
+        const followerIds = authorDoc.followers.map((follower) =>
+            follower.toString()
+        );
+
+        // Combine community members and followers, avoiding duplicates
+        const uniqueRecipients = new Set([
+            ...communityMemberIds,
+            ...followerIds,
+        ]);
+
+        const notifications = [];
+        uniqueRecipients.forEach((recipientId) => {
+            notifications.push({
+                recipient: recipientId,
+                notificationType: "post",
+                message: `${authorDoc.username} created a new post in ${community.name}.`,
+                postId: post._id, // Optional: Link to the post
+            });
+        });
+
+        // Save all notifications
+        await Notification.insertMany(notifications);
+
         res.status(201).send(post);
     } catch (error) {
         res.status(400).send({ error: error.message });
@@ -157,6 +231,13 @@ const likePost = async (req, res) => {
         }
 
         post.likes.push(userId);
+        const notification = new Notification({
+            recipient: post.author._id,
+            notificationType: 'like',
+            message: `${req.user.username} liked your post.`,
+          });
+      
+          await notification.save();
         await post.save();
         res.send({ message: "Post liked successfully" });
     } catch (error) {

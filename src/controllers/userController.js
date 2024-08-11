@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const sendEmailCode = require("../utils/sendEmailCode");
 const jwt = require("jsonwebtoken");
+const Notification = require("../models/notificationModel")
 
 const registerUser = async (req, res) => {
     const { email, phoneNumber, password } = req.body;
@@ -324,6 +325,19 @@ const followUser = async (req, res) => {
 
         await user.save();
         await userToFollow.save();
+
+        try{
+            const notification = new Notification({
+                recipient: followId,
+                notificationType: 'follow',
+                message: `${user.username} started following you.`,
+              });
+          
+              await notification.save();
+        }catch(error){
+            console.log(error)
+            return res.status(500).send("server error")
+        }
 
         res.send({ message: "User followed successfully" });
     } catch (error) {
