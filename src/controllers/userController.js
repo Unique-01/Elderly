@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const sendEmailCode = require("../utils/sendEmailCode");
 const jwt = require("jsonwebtoken");
-const Notification = require("../models/notificationModel")
+const Notification = require("../models/notificationModel");
 
 const registerUser = async (req, res) => {
     const { email, phoneNumber, password } = req.body;
@@ -235,6 +235,20 @@ const userProfile = async (req, res) => {
         res.status(400).send({ error: error.message });
     }
 };
+
+const profile = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send({ error: "User not found" });
+        }
+        res.send(user);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Server Error" });
+    }
+};
 const updateUserNewsInterest = async (req, res) => {
     /*  #swagger.parameters['body'] = {
                 in: 'body',
@@ -326,17 +340,17 @@ const followUser = async (req, res) => {
         await user.save();
         await userToFollow.save();
 
-        try{
+        try {
             const notification = new Notification({
                 recipient: followId,
-                notificationType: 'follow',
+                notificationType: "follow",
                 message: `${user.username} started following you.`,
-              });
-          
-              await notification.save();
-        }catch(error){
-            console.log(error)
-            return res.status(500).send("server error")
+            });
+
+            await notification.save();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("server error");
         }
 
         res.send({ message: "User followed successfully" });
@@ -388,4 +402,5 @@ module.exports = {
     getUsers,
     followUser,
     unfollowUser,
+    profile,
 };

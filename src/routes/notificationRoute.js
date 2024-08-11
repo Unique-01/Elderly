@@ -4,6 +4,10 @@ const getNotifications = require("../controllers/notificationController");
 
 const router = express.Router();
 
-router.get("/notifications", authMiddleware, getNotifications /* #swagger.tags = ['Notification'] */);
+router.get(
+    "/notifications",
+    authMiddleware,
+    getNotifications /* #swagger.tags = ['Notification'] */
+);
 
 module.exports = router;
