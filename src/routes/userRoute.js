@@ -22,7 +22,7 @@ const fileUpload = require("../middleware/fileUpload");
 const router = express.Router();
 
 router.get("/users", getUsers /* #swagger.tags = ['Users'] */);
-router.get("/users/:userId", profile /* #swagger.tags = ['Users'] */);
+router.get("/users/profile/:userId", profile /* #swagger.tags = ['Users'] */);
 
 router.post("/users/register", registerUser /* #swagger.tags = ['Users'] */);
 // router.post("/users/verifyEmail", verifyEmail
