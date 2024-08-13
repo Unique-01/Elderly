@@ -121,7 +121,7 @@ const getCommunityPosts = async (req, res) => {
     try {
         const posts = await Post.find({ community: communityId }).populate(
             "author",
-            "username"
+            "username fullName profilePicture"
         );
         res.send(posts);
     } catch (error) {
