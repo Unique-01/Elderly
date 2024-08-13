@@ -99,7 +99,7 @@ UserSchema.methods.generateAccessToken = async function () {
     const accessToken = jwt.sign(
         { _id: user._id.toString() },
         process.env.JWT_ACCESS_SECRET,
-        { expiresIn: "15m" }
+        { expiresIn: "1d" }
     );
 
     return accessToken;
