@@ -81,6 +81,8 @@ const joinCommunity = async (req, res) => {
         }
         community.members.push(userId);
         res.send({ message: "Community joined" });
+
+        await community.save()
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
