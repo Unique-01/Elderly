@@ -2,7 +2,7 @@ const Post = require("../models/postModel");
 const Community = require("../models/communityModel");
 const Comment = require("../models/commentModel");
 const User = require("../models/userModel");
-const Notification = require("../models/notificationModel")
+const Notification = require("../models/notificationModel");
 
 // const createPost = async (req, res) => {
 //     /*
@@ -117,7 +117,7 @@ const getAllPost = async (req, res) => {
     try {
         const post = await Post.find()
             .populate("community", "name")
-            .populate("author", "username");
+            .populate("author", "username fullName profilePicture");
 
         res.send(post);
     } catch (error) {
@@ -128,7 +128,9 @@ const getAllPost = async (req, res) => {
 const getPost = async (req, res) => {
     const { postId } = req.params;
     try {
-        const post = await Post.findOne({ _id: postId });
+        const post = await Post.findOne({ _id: postId })
+            .populate("community", "name")
+            .populate("author", "username fullName profilePicture");
         if (!post) {
             return res.status(404).send({ error: "Post not found" });
         }
@@ -141,7 +143,9 @@ const getPost = async (req, res) => {
 const getUserPosts = async (req, res) => {
     const userId = req.user._id;
     try {
-        const posts = await Post.find({ author: userId });
+        const posts = await Post.find({ author: userId })
+            .populate("community", "name")
+            .populate("author", "username fullName profilePicture");
         res.send(posts);
     } catch (error) {
         res.status(500).send({ error: "server failure" });
@@ -207,9 +211,13 @@ const deletePost = async (req, res) => {
 const getPostComments = async (req, res) => {
     const { postId } = req.params;
     try {
-        const comments = Comment.find({ postId });
+        const comments = await Comment.find({ postId }).populate(
+            "author",
+            "username fullName profilePicture"
+        );
         res.send(comments);
     } catch (error) {
+        console.log(error)
         res.status(500).send({ error: "Server Error" });
     }
 };
@@ -233,11 +241,11 @@ const likePost = async (req, res) => {
         post.likes.push(userId);
         const notification = new Notification({
             recipient: post.author._id,
-            notificationType: 'like',
+            notificationType: "like",
             message: `${req.user.username} liked your post.`,
-          });
-      
-          await notification.save();
+        });
+
+        await notification.save();
         await post.save();
         res.send({ message: "Post liked successfully" });
     } catch (error) {
