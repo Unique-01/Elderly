@@ -1502,7 +1502,7 @@
         }
       }
     },
-    "/users/{userId}": {
+    "/users/profile/{userId}": {
       "get": {
         "tags": [
           "Users"
